@@ -7,15 +7,15 @@ function getUID() {
 }
 
 
-function genImportCode(name, path) {
-  return `import ${name} from '${path}';\n`;
+function genImportCode(name, path, stripExtension) {
+  return `import ${name} from '${stripExtension ? path.replace(/\.\w+$/, "") : path}';\n`;
 }
 
 function genPropsCode(key, value) {
   return `'${key}': ${value},\n`;
 }
 
-module.exports = function genRequireCode(baseDirname, modules) {
+module.exports = function genRequireCode(baseDirname, modules, stripExtension) {
   const uid = getUID();
   let importCode = '';
   let moduleProps = '';
@@ -24,7 +24,7 @@ module.exports = function genRequireCode(baseDirname, modules) {
     const moduleName = `require_context_module_${uid}_${index}`;
 
     const moduleAbsolutePath = Path.resolve(baseDirname, file).replace(/\\/g, '/');
-    importCode += genImportCode(moduleName, moduleAbsolutePath);
+    importCode += genImportCode(moduleName, moduleAbsolutePath, stripExtension);
     moduleProps += genPropsCode(moduleAbsolutePath, moduleName);
   });
   const requireFnCode = (`

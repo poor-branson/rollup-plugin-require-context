@@ -10,7 +10,7 @@ module.exports = function plugin(options = {}) {
       if (!filter(id) || !hasRequireContext(code)) {
         return;
       }
-      code = await gernerateRequireContextCode(id, code);
+      code = await gernerateRequireContextCode(id, code, options.stripExtension);
       return code;
     }
   };
